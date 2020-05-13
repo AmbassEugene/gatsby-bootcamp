@@ -1,6 +1,6 @@
 import Layout from "../components/layouts"
 import React from "react"
-import { graphql, useStaticQuery } from "gatsby"
+import { graphql, useStaticQuery, Link } from "gatsby"
 
 const BlogPage = () => {
   const data = useStaticQuery(graphql`
@@ -11,6 +11,9 @@ const BlogPage = () => {
             frontmatter {
               title
               date
+            }
+            fields {
+              slug
             }
           }
         }
@@ -26,8 +29,10 @@ const BlogPage = () => {
       <ol>
         {blogItems.map((blog, index) => (
           <li key={index}>
-            <h3>{blog.node.frontmatter.title}</h3>
-            <p>{blog.node.frontmatter.date}</p>
+            <Link to={`/blog/${blog.node.fields.slug}`}>
+              <h3>{blog.node.frontmatter.title}</h3>
+              <p>{blog.node.frontmatter.date}</p>
+            </Link>
           </li>
         ))}
       </ol>

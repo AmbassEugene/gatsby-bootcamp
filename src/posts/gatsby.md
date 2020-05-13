@@ -4,6 +4,7 @@ date: "2020-04-05"
 ---
 
 I just launched a new bootcamp!
+![image](../assets/unsplash.jpg)
 
 ## Topics Covered
 
