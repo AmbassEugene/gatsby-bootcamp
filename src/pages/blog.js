@@ -3,6 +3,7 @@ import React from "react"
 import { graphql, useStaticQuery, Link } from "gatsby"
 
 import blogStyles from "../styles/blog.module.scss"
+import { clearConfigCache } from "prettier"
 
 const BlogPage = () => {
   const data = useStaticQuery(graphql`
@@ -20,10 +21,21 @@ const BlogPage = () => {
           }
         }
       }
+      allContentfulBlogPost(sort: { fields: publishedDate, order: DESC }) {
+        edges {
+          node {
+            title
+            slug
+            publishedDate(formatString: "MMMM Do, YYYY")
+          }
+        }
+      }
     }
   `)
 
   const blogItems = data.allMarkdownRemark.edges
+  const contentfulItems = data.allContentfulBlogPost.edges
+  console.log(blogItems)
 
   return (
     <Layout>
@@ -31,9 +43,20 @@ const BlogPage = () => {
       <ol className={blogStyles.posts}>
         {blogItems.map((blog, index) => (
           <li key={index} className={blogStyles.post}>
-            <Link to={`/blog/${blog.node.fields.slug}`}>
-              <h3>{blog.node.frontmatter.title}</h3>
-              <p>{blog.node.frontmatter.date}</p>
+            <Link to={`/blog/${blog.node.slug}`}>
+              <h3>{blog.node.title}</h3>
+              <p>{blog.node.publishedDate}</p>
+            </Link>
+          </li>
+        ))}
+      </ol>
+
+      <ol className={blogStyles.posts}>
+        {contentfulItems.map((blog, index) => (
+          <li key={index} className={blogStyles.post}>
+            <Link to={`/blog/${blog.node.slug}`}>
+              <h3>{blog.node.title}</h3>
+              <p>{blog.node.date}</p>
             </Link>
           </li>
         ))}
